@@ -20,7 +20,7 @@ All projects here demonstrate **methodology and code only** - actual NHS patient
 ### - [CAR-T Geographic Access Analysis](https://github.com/Jonathan36NHS/nhs-data-analytics-portfolio/tree/main/car-t-access-analysis)
 **Tools:** Python, Folium, pandas, geopy  
 **Skills:** Geospatial analysis, data integration, health equity  
-Interactive heatmap analysis identifying geographic barriers to CAR-T therapy access across England. Identified North East England as significantly underserved due to travel burden.
+Interactive heatmap analysis identifying geographic barriers to CAR-T therapy access across England. Demonstrates how geospatial access analysis can identify areas with greater travel burden, using illustrative/synthetic data.
 
 ---
 
