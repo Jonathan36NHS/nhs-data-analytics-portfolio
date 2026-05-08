@@ -40,8 +40,8 @@ Multi-model time series forecasting of monthly prescription volumes for three br
 
 ### [NHS Cancer Drug Trend Analysis - PUBLIC DATA](./nhs-cancer-drug-trends/) *(Coming soon)*
 **Tools:** Python, pandas, Plotly, public NHS data  
-**Skills:** Trend analysis, interactive visualization, open data  
-Analysis of publicly available NHS prescribing data examining how cancer drug utilization has changed over time. Uses only open NHS datasets.
+**Skills:** Trend analysis, interactive visualisation, open data  
+Analysis of publicly available NHS prescribing data examining how cancer drug utilisation has changed over time. Uses only open NHS datasets.
 
 ---
 
@@ -51,7 +51,7 @@ Analysis of publicly available NHS prescribing data examining how cancer drug ut
 |----------|----------------|
 | **Programming** | Python (pandas, NumPy, statsmodels, scikit-learn, Folium, Plotly) |
 | **Statistics** | Hypothesis testing, chi-square, OLS regression, time series forecasting |
-| **Visualization** | Power BI, Plotly, Folium geospatial mapping, matplotlib, seaborn |
+| **Visualisation** | Power BI, Plotly, Folium geospatial mapping, matplotlib, seaborn |
 | **Data Engineering** | SQL, ETL, data quality management, schema mapping |
 | **Healthcare** | NHS data governance, GDPR, Caldicott Principles, cancer analytics |
 
