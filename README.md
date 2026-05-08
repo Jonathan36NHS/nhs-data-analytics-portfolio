@@ -1,6 +1,6 @@
 # NHS Healthcare Analytics Portfolio
 
-**Jonathan Hill** | Data Analyst | NHS England  
+**Jonathan Hill** Senior healthcare analyst specialising in NHS high-cost medicines, cancer analytics, automation, geospatial access analysis, reproducible reporting and public-sector data governance.
 | 💼 [LinkedIn](https://www.linkedin.com/in/jonathan-d-hill/)
 
 ---
