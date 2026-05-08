@@ -59,12 +59,12 @@ Analysis of publicly available NHS prescribing data examining how cancer drug ut
 | **Data Engineering** | SQL, ETL, data quality management, schema mapping |
 | **Healthcare** | NHS data governance, GDPR, Caldicott Principles, cancer analytics |
 
----
 
-## Data Governance Note
+## Data governance
 
-I work with sensitive NHS patient data professionally. All repositories here either:
-- Demonstrate **methodology with illustrative figures only**, or  
-- Use **fully public NHS datasets** available to anyone
+No confidential NHS patient-level data is included in this portfolio.
 
-This reflects professional data governance standards, not a limitation of my work.
+Projects use public, synthetic, aggregated or illustrative data to demonstrate analytical methods while maintaining confidentiality and information governance standards.
+
+This approach reflects responsible handling of sensitive healthcare data.
+
