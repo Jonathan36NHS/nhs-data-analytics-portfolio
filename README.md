@@ -1,15 +1,19 @@
 # NHS Healthcare Analytics Portfolio
 
-**Jonathan Hill** Senior healthcare analyst specialising in NHS high-cost medicines, cancer analytics, automation, geospatial access analysis, reproducible reporting and public-sector data governance.
+**Jonathan Hill** | Healthcare Analytics & Data Governance | NHS England
+Senior healthcare analyst specialising in NHS high-cost medicines, cancer analytics, automation, geospatial access analysis, reproducible reporting and public-sector data governance.
 | 💼 [LinkedIn](https://www.linkedin.com/in/jonathan-d-hill/)
 
 ---
 
 ## About This Portfolio
 
-Six years of healthcare data analytics experience at NHS England, specialising in cancer pathways, high-cost drug analysis, and geographic access to treatment.
 
-All projects here demonstrate **methodology and code only** - actual NHS patient data is confidential and not included. Where real data is referenced, figures have been illustrative only.
+This portfolio demonstrates healthcare analytics methods relevant to NHS operational reporting, high-cost medicines, cancer pathways and geographic access to treatment.
+
+The projects show how Python, SQL, statistical modelling, geospatial analysis and forecasting can be used to support healthcare decision-making while respecting confidentiality and information governance requirements.
+
+All examples use public, synthetic, aggregated or illustrative data. No confidential NHS patient-level data is included
 
 ---
 
@@ -20,7 +24,7 @@ All projects here demonstrate **methodology and code only** - actual NHS patient
 ### - [CAR-T Geographic Access Analysis](https://github.com/Jonathan36NHS/nhs-data-analytics-portfolio/tree/main/car-t-access-analysis)
 **Tools:** Python, Folium, pandas, geopy  
 **Skills:** Geospatial analysis, data integration, health equity  
-Interactive heatmap analysis identifying geographic barriers to CAR-T therapy access across England. Demonstrates how geospatial access analysis can identify areas with greater travel burden, using illustrative/synthetic data.
+Interactive geospatial analysis demonstrating how travel burden and provider location can be used to explore potential geographic barriers to CAR-T therapy access across England.
 
 ---
 
