@@ -38,7 +38,7 @@ Multi-model time series forecasting of monthly prescription volumes for three br
 
 ---
 
-### [NHS Cancer Drug Trend Analysis - PUBLIC DATA](./nhs-cancer-drug-trends/) *(Coming soon)*
+### [NHS Cancer Drug Trend Analysis - PUBLIC DATA](./nhs-cancer-drug-trends/) *(planned project)*
 **Tools:** Python, pandas, Plotly, public NHS data  
 **Skills:** Trend analysis, interactive visualisation, open data  
 Analysis of publicly available NHS prescribing data examining how cancer drug utilisation has changed over time. Uses only open NHS datasets.
