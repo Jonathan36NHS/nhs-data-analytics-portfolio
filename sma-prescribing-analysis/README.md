@@ -1,127 +1,189 @@
-# Breast Cancer Treatment Demand Forecasting
+# Spinal Muscular Atrophy Drug Prescribing Bias Analysis
 
-Time series forecasting of monthly prescriptions for three breast cancer indications (ABEM2, PAL2, RIB2) to support NHS stock management and resource planning.
+> ⚠️ **Note:** All figures in this document are illustrative only, created to demonstrate methodology. Actual NHS prescribing data is confidential.
 
-⚠️ **Data Confidentiality Notice:** Methodology demonstration only. Actual NHS prescribing data is confidential. The following data is synthetic and does not reflect real patient or prescribing records.
+## Project Overview
 
-## Objective
-Forecast next 6 months of demand for ABEM2, PAL2, and RIB2 to optimise NHS drug procurement and reduce stockouts/waste.
+**Objective:** Determine whether NHS Trusts show prescribing bias between two SMA treatments based on financial tariff incentives.
 
-## Data
-- **Timeframe:** September 2019 - May 2025 (69 months)
-- **Indications:** 3 breast cancer treatments
-- **Total approvals:** 3, 206 prescriptions
+**Clinical Context:**
+- **Risdiplam:** Oral therapy, easier to administer, no financial tariff for Trusts
+- **Nusinersen:** Intrathecal injection, more complex to administer, some Trusts receive a financial tariff for initiating treatment
+- **Question:** Does receiving a financial tariff influence clinical prescribing decisions?
+
+**Tools:** Python, pandas, statsmodels, scipy, seaborn, matplotlib
+
+---
+
+## Illustrative Findings
+
+> These figures are illustrative examples demonstrating the type of analysis conducted, not actual NHS data.
+
+**Illustrative dataset:** 20 NHS Trusts, ~1,200 total approvals over 4 years
+
+### Descriptive Statistics (Illustrative)
+
+| Drug | Mean | Median | Std Dev | Min | Max |
+|------|------|--------|---------|-----|-----|
+| Drug A (oral, no tariff) | 38.5 | 35.0 | 19.2 | 0 | 78 |
+| Drug B (injection, tariff) | 22.1 | 18.0 | 14.8 | 0 | 61 |
+
+**Pattern observed:** High variability between Trusts, with some exclusively prescribing one drug.
+
+---
 
 ## Methodology
 
-### 1. Descriptive Analytics
-```python
-# Monthly aggregation
-monthly_counts = df.groupby(['Month', 'FormCode']).size().unstack(fill_value=0)
-
-# Summary statistics per drug
-for drug in ['ABEM2', 'PAL2', 'RIB2']:
-    print(f"\n{drug} statistics:")
-    print(f"Mean: {monthly_counts[drug].mean():.2f}")
-    print(f"Median: {monthly_counts[drug].median():.2f}")
-    print(f"Mode: {monthly_counts[drug].mode().values[0]}")
-    print(f"Std Dev: {monthly_counts[drug].std():.2f}")
-```
-
-**Results:**
-- **ABEM2:** Mean=51.43, Median=47, Mode=52, SD=31.63
-- **PAL2:** Mean=74.61, Median=71, Mode=56, SD=36.13 (highest variability)
-- **RIB2:** Mean=38.00, Median=38, Mode=49, SD=25.85
-
-### 2. Model Selection & Training
-
-**Models Evaluated:**
-1. **Naive Forecast:** Next month = last observed month
-2. **Simple Exponential Smoothing:** Weighted average favoring recent values
-3. **Holt's Linear Trend:** Accounts for gradual increases/decreases
+### Step 1: Exploratory Data Analysis
 
 ```python
-from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-# Train-test split (last 6 months held out for validation)
-train = monthly_counts[:-6]
-test = monthly_counts[-6:]
+# Load prescribing data
+df = pd.read_excel("sma_data.xlsx")
 
-# Fit models for each drug
-for drug in ['ABEM2', 'PAL2', 'RIB2']:
-    # Naive
-    naive_forecast = [train[drug].iloc[-1]] * 6
-    
-    # Exponential Smoothing
-    es_model = SimpleExpSmoothing(train[drug]).fit()
-    es_forecast = es_model.forecast(6)
-    
-    # Holt's Linear Trend
-    holt_model = Holt(train[drug]).fit()
-    holt_forecast = holt_model.forecast(6)
+# Summarize by Trust and drug
+summary = df.pivot_table(
+    index='Trust',
+    columns='Intervention',
+    aggfunc='size',
+    fill_value=0
+)
+
+# Descriptive statistics
+for drug in summary.columns:
+    print(f"\n{drug} stats:")
+    print(f"  Mean:    {summary[drug].mean():.2f}")
+    print(f"  Median:  {summary[drug].median():.2f}")
+    print(f"  Std Dev: {summary[drug].std():.2f}")
+    print(f"  Range:   {summary[drug].min()} - {summary[drug].max()}")
 ```
 
-### 3. Model Evaluation (RMSE)
+### Step 2: Hypothesis Testing
+
+**Null Hypothesis (H₀):** No association between NHS Trust and drug prescribed  
+**Alternative Hypothesis (H₁):** Financial tariff influences drug selection  
+**Significance level:** α = 0.05
 
 ```python
-from sklearn.metrics import mean_squared_error
-import numpy as np
+import scipy.stats as stats
 
-# Calculate RMSE for each model
-for drug in ['ABEM2', 'PAL2', 'RIB2']:
-    naive_rmse = np.sqrt(mean_squared_error(test[drug], naive_forecast))
-    es_rmse = np.sqrt(mean_squared_error(test[drug], es_forecast))
-    holt_rmse = np.sqrt(mean_squared_error(test[drug], holt_forecast))
-    
-    print(f"{drug}: Naive RMSE={naive_rmse:.2f}, "
-          f"Simple Exp Smoothing RMSE={es_rmse:.2f}, "
-          f"Holt's Linear RMSE={holt_rmse:.2f}")
+# Chi-square test of independence
+observed = summary.values
+chi2, p_value, dof, expected = stats.chi2_contingency(observed)
+
+print(f"Chi-square statistic: {chi2:.2f}")
+print(f"Degrees of freedom:   {dof}")
+print(f"p-value:              {p_value:.2e}")
+
+if p_value < 0.05:
+    print("Result: REJECT null hypothesis - significant association found")
 ```
 
-**Results:**
-- **ABEM2:** Best model = **Simple Exponential Smoothing** (RMSE=21.55)
-- **PAL2:** Best model = **Simple Exponential Smoothing** (RMSE=8.64)
-- **RIB2:** Best model = **Holt's Linear Trend** (RMSE=5.78)
+**Why chi-square?** Both variables (Trust and drug) are categorical. Chi-square tests whether observed distribution deviates from what would be expected if prescribing were random.
 
-### 4. Final Forecasts (June-November 2025)
+**Why not t-test?** A t-test compares means of continuous variables - not appropriate here as we have count data across multiple categories.
 
-| Month | ABEM2 | PAL2 | RIB2 |
-|-------|-------|------|------|
-| Jun 2025 | 36.7 | 55.0 | 50.8 |
-| Jul 2025 | 36.7 | 55.0 | 50.4 |
-| Aug 2025 | 36.7 | 55.0 | 50.0 |
-| Sep 2025 | 36.7 | 55.0 | 49.6 |
-| Oct 2025 | 36.7 | 55.0 | 49.2 |
-| Nov 2025 | 36.7 | 55.0 | 48.8 |
+### Step 3: Regression Analysis
 
-**Key Insights:**
-- **No seasonality detected** - stable monthly patterns
-- **RIB2 shows slight downward trend** (Holt's captures this)
-- **PAL2 remains highest volume** with moderate variability
+```python
+import statsmodels.formula.api as smf
 
-## Business Impact
+# Create tariff proxy variable
+# Trusts with >60% of one drug likely have the financial tariff
+summary['Total'] = summary.sum(axis=1)
+summary['Oral_Proportion'] = summary['Drug_A'] / summary['Total']
+summary['Tariff_Proxy'] = (
+    summary['Drug_B'] / summary['Total'] >= 0.6
+).astype(int)
 
-**Stock Management:**
-- Informed procurement: ~140 units/month total demand
-- Reduced waste: No need for large safety stocks given stability
-- Improved planning: 6-month visibility for budgeting
+# OLS regression: does tariff status predict oral drug use?
+model = smf.ols('Oral_Proportion ~ Tariff_Proxy', data=summary).fit()
+print(model.summary())
+```
 
-**Stakeholder Value:**
-- Confirmed stakeholder assumption of no seasonality (data-driven validation)
-- Enabled consistent stock levels throughout 2025
-- Provided confidence intervals for risk management
+**Model selection reasoning:**
+- Outcome (prescription proportion) is **continuous** → OLS regression appropriate
+- If outcome were binary (prescribed/not) → logistic regression would be used
+- Small sample (20 Trusts) → noted as limitation; larger dataset would strengthen conclusions
 
-## Skills Demonstrated
-- **Time Series Analysis:** ARIMA, exponential smoothing, Holt's method
-- **Model Selection:** RMSE-based comparison, choosing appropriate models
-- **Python:** statsmodels, pandas, sklearn
-- **Forecasting:** Multi-step ahead prediction
-- **Healthcare Analytics:** Drug demand planning
+### Step 4: Visualization
 
-## Lessons Learned
-- **SARIMA not needed:** Lack of seasonality meant simpler models performed best
-- **Drug-specific patterns:** Each treatment required individual model selection
-- **Validation critical:** Hold-out testing prevented overfitting
+```python
+# Box plot comparing prescribing patterns by tariff status
+fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+# Box plot
+sns.boxplot(
+    data=summary,
+    x='Tariff_Proxy',
+    y='Oral_Proportion',
+    ax=axes[0],
+    palette=['#005EB8', '#AE2573']  # NHS blue and purple
+)
+axes[0].set_xticklabels(['No Tariff', 'Likely Tariff'])
+axes[0].set_title('Oral Drug Proportion by Inferred Tariff Status')
+axes[0].set_ylabel('Proportion of Oral Drug Prescriptions')
+
+# Clustered bar chart by Trust
+summary[['Drug_A', 'Drug_B']].plot(
+    kind='barh',
+    ax=axes[1],
+    color=['#005EB8', '#AE2573']
+)
+axes[1].set_title('Prescriptions by Trust and Drug')
+axes[1].set_xlabel('Number of Approvals')
+
+plt.tight_layout()
+plt.savefig('sma_prescribing_analysis.png', dpi=300, bbox_inches='tight')
+```
 
 ---
-Code: `code/breast_cancer_forecasting.py`
+
+## Illustrative Results
+
+> These are example findings to demonstrate the type of conclusions this analysis would generate.
+
+**Regression output (illustrative):**
+- **Coefficient:** -0.48 (p = 0.002)
+- **Interpretation:** Trusts with inferred tariff prescribed approximately **48 percentage points less** of the oral drug
+- **R² = 0.41:** Tariff status explains ~41% of prescribing variation
+
+**Statistical test (illustrative):**
+- χ² ≈ 142.0, df = 19, p < 0.001
+- **Conclusion:** Strong evidence that prescribing patterns differ significantly by Trust, consistent with financial tariff influence
+
+---
+
+## Policy Implications
+
+This type of analysis provides evidence for:
+- **Reviewing tariff structures** that may incentivize more complex, costly treatments over simpler alternatives
+- **Ensuring patient access** is driven by clinical need rather than financial incentives
+- **Supporting health equity** by identifying and addressing structural barriers to optimal treatment
+
+---
+
+## Limitations
+
+- **Tariff proxy:** Inferred from prescribing patterns, not confirmed tariff data
+- **Confounding variables:** Clinical expertise, patient demographics, local guidelines not controlled for  
+- **Small n:** 20 Trusts is a limited sample for regression conclusions
+- **Enhancement:** Access to confirmed tariff data and patient-level covariates would strengthen analysis
+
+---
+
+## Skills Demonstrated
+
+- **Statistical testing:** Chi-square test of independence, hypothesis formulation
+- **Regression modelling:** OLS, interpretation of coefficients and p-values
+- **Model selection:** Justified choice of chi-square over t-test, ANOVA, logistic regression
+- **Python:** pandas, scipy, statsmodels, seaborn, matplotlib
+- **Healthcare policy analysis:** Understanding clinical and financial incentives in NHS
+- **Data governance:** Using aggregate data, suppressing small numbers, maintaining confidentiality
+
+---
+
+*Methodology based on Level 4 Data Analyst Apprenticeship project, NHS England 2024-2025. All figures are illustrative.*
