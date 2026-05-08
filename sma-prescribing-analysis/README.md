@@ -1,10 +1,10 @@
-# Spinal Muscular Atrophy Drug Prescribing Bias Analysis
+# Spinal Muscular Atrophy Prescribing Variation Analysis
 
 > ⚠️ **Note:** All figures in this document are illustrative only, created to demonstrate methodology. Actual NHS prescribing data is confidential.
 
 ## Project Overview
 
-**Objective:** Determine whether NHS Trusts show prescribing bias between two SMA treatments based on financial tariff incentives.
+**Objective:** Demonstrate how statistical analysis can be used to explore variation in SMA treatment patterns across NHS Trusts, using illustrative data and a hypothetical financial tariff variable.
 
 **Clinical Context:**
 - **Risdiplam:** Oral therapy, easier to administer, no financial tariff for Trusts
@@ -29,6 +29,35 @@
 | Drug B (injection, tariff) | 22.1 | 18.0 | 14.8 | 0 | 61 |
 
 **Pattern observed:** High variability between Trusts, with some exclusively prescribing one drug.
+
+---
+
+## Policy Implications
+
+This type of analysis provides evidence for:
+- **Reviewing tariff structures** that may incentivize more complex, costly treatments over simpler alternatives
+- **Ensuring patient access** is driven by clinical need rather than financial incentives
+- **Supporting health equity** by identifying and addressing structural barriers to optimal treatment
+
+---
+
+## Limitations
+
+- **Tariff proxy:** Inferred from prescribing patterns, not confirmed tariff data
+- **Confounding variables:** Clinical expertise, patient demographics, local guidelines not controlled for  
+- **Small n:** 20 Trusts is a limited sample for regression conclusions
+- **Enhancement:** Access to confirmed tariff data and patient-level covariates would strengthen analysis
+
+---
+
+## Skills Demonstrated
+
+- **Statistical testing:** Chi-square test of independence, hypothesis formulation
+- **Regression modelling:** OLS, interpretation of coefficients and p-values
+- **Model selection:** Justified choice of chi-square over t-test, ANOVA, logistic regression
+- **Python:** pandas, scipy, statsmodels, seaborn, matplotlib
+- **Healthcare policy analysis:** Understanding clinical and financial incentives in NHS
+- **Data governance:** Using aggregate data, suppressing small numbers, maintaining confidentiality
 
 ---
 
@@ -157,33 +186,3 @@ plt.savefig('sma_prescribing_analysis.png', dpi=300, bbox_inches='tight')
 
 ---
 
-## Policy Implications
-
-This type of analysis provides evidence for:
-- **Reviewing tariff structures** that may incentivize more complex, costly treatments over simpler alternatives
-- **Ensuring patient access** is driven by clinical need rather than financial incentives
-- **Supporting health equity** by identifying and addressing structural barriers to optimal treatment
-
----
-
-## Limitations
-
-- **Tariff proxy:** Inferred from prescribing patterns, not confirmed tariff data
-- **Confounding variables:** Clinical expertise, patient demographics, local guidelines not controlled for  
-- **Small n:** 20 Trusts is a limited sample for regression conclusions
-- **Enhancement:** Access to confirmed tariff data and patient-level covariates would strengthen analysis
-
----
-
-## Skills Demonstrated
-
-- **Statistical testing:** Chi-square test of independence, hypothesis formulation
-- **Regression modelling:** OLS, interpretation of coefficients and p-values
-- **Model selection:** Justified choice of chi-square over t-test, ANOVA, logistic regression
-- **Python:** pandas, scipy, statsmodels, seaborn, matplotlib
-- **Healthcare policy analysis:** Understanding clinical and financial incentives in NHS
-- **Data governance:** Using aggregate data, suppressing small numbers, maintaining confidentiality
-
----
-
-*Methodology based on Level 4 Data Analyst Apprenticeship project, NHS England 2024-2025. All figures are illustrative.*
