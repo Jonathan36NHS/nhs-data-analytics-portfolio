@@ -1,7 +1,7 @@
 # NHS Healthcare Analytics Portfolio
 
 **Jonathan Hill** | Data Analyst | NHS England  
-| 💼 [LinkedIn](https://www.linkedin.com/in/jonathan-david-hill/)
+| 💼 (https://www.linkedin.com/in/jonathan-david-hill/)
 
 ---
 
